@@ -16,14 +16,14 @@ async function getItems() {
 
 async function getData() {
    await getItems();
-   const cities = ['Bridgewatch', 'Caerleon', 'FortSterling', 'Martlock', 'Thetford'];
-   let bestProfit = [0, 0, 0, 0, 0];
+   const cities = ['Bridgewatch', 'Caerleon', 'FortSterling', 'Martlock', 'Lymhurst', 'Thetford'];
+   let bestProfit = [0, 0, 0, 0, 0, 0];
    let bestItem = [];
    const e = document.getElementById("city-select");
    const selectedCity = e.options[e.selectedIndex].value;
-   //Bw,Caer,Fort,Mart,Thet
+   //Bw,Caer,Fort,Lym,Mart,Thet
    for (let i = 0; i < items.length; i++) {
-      const cities_url = 'Caerleon,Bridgewatch,Martlock,Thetford,FortSterling,Lymhurst'
+      const cities_url = 'Lymhurst,Caerleon,Bridgewatch,Martlock,Thetford,FortSterling'
       const api_url = 'https://www.albion-online-data.com/api/v2/stats/Prices/' + items[i] + '?locations=' + cities_url;
       const response = await fetch(api_url);
       const data = await response.json();
