@@ -19,6 +19,7 @@ async function getData() {
    let bestProfit = 0;
    let bestCity;
    let bestItem;
+   let from;
    for (let i = 0; i < items.length; i++) {
       const cities = 'Bridgewatch,Caerleon,Lymhurst,Martlock';
       const api_url = 'https://www.albion-online-data.com/api/v2/stats/Prices/' + items[i] + '?locations=' + cities;
@@ -26,11 +27,11 @@ async function getData() {
       const data = await response.json();
       // console.log(data);
       for (let j = 0; j < data.length; j++) {
-         let from = data[0];
+         from = data[1];
          let sell = data[j];
-         let profit = from.sell_price_min - sell.sell_price_min;
+         let profit = sell.sell_price_min - from.sell_price_min;
          console.log(profit);
-         if (profit > bestProfit) {
+         if (profit > bestProfit && profit < 1000000) {
             bestItem = sell.item_id;
             bestProfit = profit;
             bestCity = sell.city;
@@ -38,7 +39,7 @@ async function getData() {
       }
 
    }
-   document.getElementById('cityFrom').innerHTML = "Bridgewatch";
+   document.getElementById('cityFrom').innerHTML = from.city;
    document.getElementById('cityTo').innerHTML = bestCity;
    document.getElementById('item').innerHTML = bestItem;
    document.getElementById('profit').innerHTML = bestProfit;
