@@ -16,38 +16,51 @@ async function getItems() {
 
 async function getData() {
    await getItems();
-   let bestProfit = 0;
-   let bestCity;
-   let bestItem;
-   let from;
+   const cities = ['Bridgewatch', 'Caerleon', 'FortSterling', 'Martlock', 'Thetford'];
+   let bestProfit = [0, 0, 0, 0, 0];
+   let bestItem = [];
+   const e = document.getElementById("city-select");
+   const selectedCity = e.options[e.selectedIndex].value;
+   //Bw,Caer,Fort,Mart,Thet
    for (let i = 0; i < items.length; i++) {
-      const cities = 'Bridgewatch,Caerleon,Lymhurst,Martlock';
-      const api_url = 'https://www.albion-online-data.com/api/v2/stats/Prices/' + items[i] + '?locations=' + cities;
+      const cities_url = 'Caerleon,Bridgewatch,Martlock,Thetford,FortSterling,Lymhurst'
+      const api_url = 'https://www.albion-online-data.com/api/v2/stats/Prices/' + items[i] + '?locations=' + cities_url;
       const response = await fetch(api_url);
       const data = await response.json();
       // console.log(data);
       for (let j = 0; j < data.length; j++) {
-         from = data[1];
-         let sell = data[j];
-         let profit = sell.sell_price_min - from.sell_price_min;
+         if (j == selectedCity) {
+            bestItem[j] = 'Selected City';
+            continue
+         };
+         let profit = data[j].sell_price_min - data[selectedCity].sell_price_min;
          console.log(profit);
-         if (profit > bestProfit && profit < 1000000) {
-            bestItem = sell.item_id;
-            bestProfit = profit;
-            bestCity = sell.city;
+         if (profit > bestProfit[j] && profit < 1000000) {
+            bestProfit[j] = profit;
+            bestItem[j] = data[j].item_id;
          }
+         // from = data[selectedCity];
+         // let sell = data[j];
+         // let profit = sell.sell_price_min - from.sell_price_min;
+         // console.log(profit);
+         // if (profit > bestProfit && profit < 1000000) {
+         //    bestItem = sell.item_id;
+         //    bestProfit = profit;
+         //    bestCity = sell.city;
+         // }
       }
 
    }
-   document.getElementById('cityFrom').innerHTML = from.city;
-   document.getElementById('cityTo').innerHTML = bestCity;
-   document.getElementById('item').innerHTML = bestItem;
-   document.getElementById('profit').innerHTML = bestProfit;
-
-   console.log(bestCity);
-   console.log(bestProfit);
+   for (let i = 0; i < cities.length; i++) {
+      document.getElementById('city' + i).innerHTML = cities[i];
+      document.getElementById('item' + i).innerHTML = bestItem[i];
+      document.getElementById('profit' + i).innerHTML = bestProfit[i];
+   }
+   console.log(selectedCity);
    console.log(bestItem);
+   console.log(bestProfit);
 }
 
-
-getData();
+document.getElementById('submit').onclick = () => {
+   getData();
+};
