@@ -16,7 +16,7 @@ async function getItems() {
 
 async function getData() {
    await getItems();
-   const cities = ['Bridgewatch', 'Caerleon', 'FortSterling', 'Martlock', 'Lymhurst', 'Thetford'];
+   const cities = ['Bridgewatch', 'Caerleon', 'Fort Sterling', 'Lymhurst', 'Martlock', 'Thetford'];
    let bestProfit = [0, 0, 0, 0, 0, 0];
    let bestItem = [];
    const e = document.getElementById("city-select");
