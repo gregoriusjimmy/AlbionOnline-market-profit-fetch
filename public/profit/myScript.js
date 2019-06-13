@@ -7,31 +7,37 @@ async function getItems() {
    const data = await response.text();
 
    // selection
-   for (let i = 0; i < 3; i++) {
-      t4level[i] = document.getElementById('t4level' + (i + 1));
-      t5level[i] = document.getElementById('t5level' + (i + 1));
+   for (let i = 0; i < 4; i++) {
+      t4level[i] = document.getElementById('t4level' + i);
+      t5level[i] = document.getElementById('t5level' + i);
 
    }
    console.log(t4level);
    if (t4level[0].checked) {
-      allRegex.push(/T4_\w+@1/);
+      allRegex.push(/T4_\w+$/m);
    }
    if (t4level[1].checked) {
-      allRegex.push(/T4_\w+@2/);
+      allRegex.push(/T4_\w+@1/);
    }
    if (t4level[2].checked) {
+      allRegex.push(/T4_\w+@2/);
+   }
+   if (t4level[3].checked) {
       allRegex.push(/T4_\w+@3/);
    }
    if (t5level[0].checked) {
-      allRegex.push(/T5_\w+@1/);
+      allRegex.push(/T5_\w+$/m);
    }
    if (t5level[1].checked) {
-      allRegex.push(/T5_\w+@2/);
+      allRegex.push(/T5_\w+@1/);
    }
    if (t5level[2].checked) {
-      allRegex.push(/T5_\w+@3/);
+      allRegex.push(/T5_\w+@2/);
    }
-   allRegex.push(/T\w_\w+$/m);
+   if (t5level[3].checked) {
+      allRegex.push(/T4_\w+@3/);
+   }
+   allRegex.push(/T[23]\w+$/m);
 
    // console.log(allRegex);
 
@@ -69,7 +75,7 @@ async function getData() {
          };
          let profit = data[j].sell_price_min - data[selectedCity].sell_price_min;
          console.log(profit);
-         if (profit > bestProfit[j] && profit < 1000000) {
+         if (profit > bestProfit[j] && profit < 899999) {
             bestProfit[j] = profit;
             bestItem[j] = data[j].item_id;
          }
