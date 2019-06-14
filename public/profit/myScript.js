@@ -58,6 +58,8 @@ async function getData() {
    const cities = ['Bridgewatch', 'Caerleon', 'Fort Sterling', 'Lymhurst', 'Martlock', 'Thetford'];
    let bestProfit = [0, 0, 0, 0, 0, 0];
    let bestItem = [];
+   let targetDate = [];
+   let selectedCityDate = [];
    const e = document.getElementById("city-select");
    const selectedCity = e.options[e.selectedIndex].value;
    //Bw,Caer,Fort,Lym,Mart,Thet
@@ -76,6 +78,8 @@ async function getData() {
          let profit = data[j].sell_price_min - data[selectedCity].sell_price_min;
          console.log(profit);
          if (profit > bestProfit[j] && profit < 899999) {
+            targetDate[j] = data[j].sell_price_min_date;
+            selectedCityDate[j] = data[selectedCity].sell_price_min_date;
             bestProfit[j] = profit;
             bestItem[j] = data[j].item_id;
          }
@@ -95,6 +99,8 @@ async function getData() {
       document.getElementById('city' + i).innerHTML = cities[i];
       document.getElementById('item' + i).innerHTML = bestItem[i];
       document.getElementById('profit' + i).innerHTML = bestProfit[i];
+      document.getElementById('targetDate' + i).innerHTML = targetDate[i];
+      document.getElementById('selectedCityDate' + i).innerHTML = selectedCityDate[i];
    }
    console.log(selectedCity);
    console.log(bestItem);
