@@ -136,7 +136,7 @@ async function getData() {
          if (profit > result[j].bestProfit[counter]) {
 
             result[j].bestItems[counter] = data[j].item_id;
-            result[j].bestProfit[counter] = data[j].sell_price_min;
+            result[j].bestProfit[counter] = profit
             result[j].date[counter] = data[j].sell_price_min_date;
             result[j].targetDate[counter] = data[selectedCityIndex].sell_price_min_date;
             result[j].count = result[j].count + 1;
@@ -144,7 +144,7 @@ async function getData() {
       }
    }
    console.log(result);
-   document.getElementById('pa').innerHtml = result;
+
 
 }
 document.getElementById('submit').onclick = () => {
