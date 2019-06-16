@@ -143,6 +143,8 @@ async function getData() {
          }
       }
    }
+   await bubbleSort(result);
+   await takeTop10(result);
    console.log(result);
 
 
@@ -151,3 +153,46 @@ document.getElementById('submit').onclick = () => {
    getData();
 
 };
+
+
+async function takeTop10(result) {
+   for (let i = 0; i < result.length; i++) {
+      let length = result[i].bestProfit.length;
+      let city = result[i];
+      for (let j = length - 11; j >= 0; j--) {
+         city.bestProfit.pop();
+         city.bestItems.pop();
+         city.date.pop();
+         city.targetDate.pop();
+      }
+   }
+}
+async function bubbleSort(result) {
+   for (let k = 0; k < result.length; k++) {
+      let length = result[k].bestProfit.length;
+      let city = result[k];
+      for (let i = length - 1; i >= 0; i--) {
+         //Notice that j < (length - i)
+         for (let j = length - 1 - i; j >= 0; j--) {
+            //Compare the adjacent positions
+            if (city.bestProfit[j] > city.bestProfit[j - 1]) {
+               //Swap the numbers
+               let tempbestProfit = city.bestProfit[j]; //Temporary variable to hold the current number
+               let tempbestItems = city.bestItems[j];
+               let tempdate = city.date[j];
+               let temptargetDate = city.targetDate[j];
+
+               city.bestProfit[j] = city.bestProfit[j - 1]; //Replace current number with adjacent number
+               city.bestItems[j] = city.bestItems[j - 1];
+               city.date[j] = city.date[j - 1];
+               city.targetDate[j] = city.targetDate[j - 1];
+
+               city.bestProfit[j - 1] = tempbestProfit; //Replace adjacent number with current number
+               city.bestItems[j - 1] = tempbestItems;
+               city.date[j - 1] = tempdate;
+               city.targetDate[j - 1] = temptargetDate;
+            }
+         }
+      }
+   }
+}
