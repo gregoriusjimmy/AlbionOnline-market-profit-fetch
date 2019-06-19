@@ -2,6 +2,7 @@ const items = [];
 const allRegex = [];
 const t4level = [];
 const t5level = [];
+const t6level = [];
 
 var result = [{
    city: "Bridgewatch",
@@ -57,7 +58,7 @@ async function getItems() {
    const response = await fetch('items.txt');
    const data = await response.text();
 
-   t6level[0] = document.getElementById('t6level' + i);
+   t6level[0] = document.getElementById('t6level0');
    // selection
    for (let i = 0; i < 4; i++) {
       t4level[i] = document.getElementById('t4level' + i);
@@ -96,15 +97,15 @@ async function getItems() {
 
    console.log(allRegex);
 
-   const item = data.split('\n');
-   // rows.forEach(element => {
-   //    const item = element //.substring(4);
-   //    // console.log(item);
-   for (let i = 0; i < allRegex.length; i++)
-      if (item.match(allRegex[i])) {
-         items.push(item);
-      }
-   // });
+   const rows = data.split('\n');
+   rows.forEach(element => {
+      const item = element //.substring(4);
+      // console.log(item);
+      for (let i = 0; i < allRegex.length; i++)
+         if (item.match(allRegex[i])) {
+            items.push(item);
+         }
+   });
    console.log(items);
 }
 const cities = ['Bridgewatch', 'Caerleon', 'Fort Sterling', 'Lymhurst', 'Martlock', 'Thetford'];
