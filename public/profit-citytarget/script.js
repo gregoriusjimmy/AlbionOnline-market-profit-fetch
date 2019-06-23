@@ -1,26 +1,36 @@
+// the data that will be sent to the server
 const sendData = {
    items: [],
    cityTarget: ''
 };
+// array for store regex 
 const allRegex = [];
+// array for DOM
 const t4level = [];
 const t5level = [];
 const t6level = [];
 
+
 async function getItems() {
+   //fetch items.txt
    const response = await fetch('items.txt');
    const data = await response.text();
    const e = document.getElementById("city-select");
+   //get target city from select element 
    const selectedCity = e.options[e.selectedIndex].value;
    sendData.cityTarget = selectedCity;
-   t6level[0] = document.getElementById('t6level0');
-   // selection
+
+   // selection items
+   t6level[0] = document.getElementById('t6level0')
    for (let i = 0; i < 4; i++) {
       t4level[i] = document.getElementById('t4level' + i);
       t5level[i] = document.getElementById('t5level' + i);
 
    }
-   // console.log(t4level);
+   // check the checkbox if checked or not
+   // if checked store the regex to the allRegex array
+
+   allRegex.push(/T[23]\w+$/m); // default items
    if (t4level[0].checked) {
       allRegex.push(/T4_\w+$/m);
    }
@@ -48,43 +58,42 @@ async function getItems() {
    if (t6level[0].checked) {
       allRegex.push(/T6_\w+$/m)
    }
-   allRegex.push(/T[23]\w+$/m);
 
-   // console.log(allRegex);
-
+   // get each item in items.txt
    const rows = data.split('\n');
    rows.forEach(element => {
-      const item = element //.substring(4);
-      // console.log(item);
+      const item = element
+      // for every item ,if the item match any allRegex's array
+      // store the item to the sendData
       for (let i = 0; i < allRegex.length; i++)
          if (item.match(allRegex[i])) {
             sendData.items.push(item);
          }
    });
 
-
-   // console.log(items);
+   // change fetch method to POST
    const options = {
       method: 'POST',
       headers: {
          'Content-Type': 'application/json'
       },
-      body: JSON.stringify(sendData, null, 2)
+      body: JSON.stringify(sendData, null, 2) // send sendData to the server with JSON format
    };
-   //sending items to ther serer
 
+   //send senData to ther /items route
    const response_items = await fetch('/items', options);
    const json = await response_items.json();
    console.log(json);
 }
 
 
-
+// if client click submit button do all of those things
 document.getElementById('submit').onclick = async () => {
    await getItems();
    getResult();
 };
 
+// receive the answer from the server after the data had been calculated
 async function getResult() {
    const response_result = await fetch('/result');
    const result_json = await response_result.json();

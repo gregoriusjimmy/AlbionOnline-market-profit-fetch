@@ -1,3 +1,4 @@
+// initialize 
 const express = require('express');
 const fetch = require('node-fetch');
 const bodyParser = require('body-parser')
@@ -6,14 +7,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
    extended: false
 }))
+// listen to port 3000
 app.listen(3000, () => console.log('listening..'));
 app.use(express.json({
    limit: '1mb'
 }));
 app.use(express.static('public'));
-app.use('/profit', express.static('public'));
+// app.use('/profit', express.static('public'));
 app.use('/profit-citytarget', express.static('public'));;
 
+// receive all selected items from client
 app.post('/items', async (request, response) => {
    console.log(request.body);
    gotData = request.body;
@@ -24,14 +27,16 @@ app.post('/items', async (request, response) => {
    })
 });
 
+// send the result to the /result route
 app.get('/result', async (request, response) => {
    await calculateResult();
    response.json(result);
 });
 
-//data and selectedCity
+//object for received data
 let gotData = {};
 
+// object for result
 var result = [{
    city: "Bridgewatch",
    bestItems: [],
@@ -89,23 +94,24 @@ async function calculateResult() {
    const selectedCity = gotData.cityTarget;
    let selectedCityIndex;
 
+   // find the city index based from city's order
    for (let i = 0; i < cities.length; i++) {
       if (selectedCity == cities[i]) {
          selectedCityIndex = i;
          break;
       }
    }
-   console.log(selectedCityIndex);
    for (let i = 0; i < gotData.items.length; i++) {
       gotData.items[i] = gotData.items[i].replace(/\r?\n|\r/gm, "");
       const api_url = 'https://www.albion-online-data.com/api/v2/stats/Prices/' + gotData.items[i] + '?locations=' + cities_url;
       const response = await fetch(api_url);
       const data = await response.json()
+
       for (let j = 0; j < cities.length; j++) {
          if (j == selectedCityIndex) {
             continue;
          }
-
+         // the algorithm for finding profit from every city to city target
          let counter = result[j].count;
          let profit = data[selectedCityIndex].sell_price_min - data[j].sell_price_min;
          console.log(profit);
@@ -126,6 +132,7 @@ async function calculateResult() {
    console.log(result);
 }
 
+//take ten most profitable items
 async function takeTop10(result) {
    for (let i = 0; i < result.length; i++) {
       let length = result[i].bestProfit.length;
@@ -138,9 +145,10 @@ async function takeTop10(result) {
       }
    }
 }
+// sorting result from hight profit to low
 async function bubbleSort(result) {
    for (let k = 0; k < result.length; k++) {
-      let length = result[k].bestProfit.length;
+      let length = result[k].bestItems.length;
       let city = result[k];
       for (let i = length - 1; i >= 0; i--) {
          //Notice that j < (length - i)

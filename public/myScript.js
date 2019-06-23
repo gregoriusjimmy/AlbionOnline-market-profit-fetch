@@ -1,10 +1,11 @@
 let timeLength = 12;
 let pricesCategory = 1;
-
+const firstTime = true;
 async function getData() {
    const xs = [];
    const ys = [];
-   const item = 'T4_CLOTH';
+   const item = document.getElementById('searchItem').value;
+
    const e = document.getElementById("city-select");
    const city = e.options[e.selectedIndex].value;
    const api_url =
@@ -12,7 +13,7 @@ async function getData() {
 
    const response = await fetch(api_url);
    const data = await response.json();
-   console.log(data[0].location);
+
    const labels = data[0].data;
    for (let i = labels.timestamps.length - timeLength; i < labels.timestamps.length; i++) {
       // Create a new JavaScript Date object based on the timestamp
@@ -36,7 +37,7 @@ async function getData() {
       // Seconds part from the timestamp
       let seconds = "0" + date.getSeconds();
       let time = month + ' ' + day + ' ' + hours + ':' + minutes;
-      console.log(pricesCategory);
+
       xs.push(time);
       if (pricesCategory == 1) {
          prices = labels.prices_min[i];
@@ -61,14 +62,14 @@ async function getData() {
 async function chartIt() {
 
    const data = await getData();
-   console.log(data);
+
    const ctx = document.getElementById('myChart').getContext('2d');
    var myChart = new Chart(ctx, {
       type: 'line',
       data: {
          labels: data.xs,
          datasets: [{
-            label: 'Fine Cloth Data Market',
+            label: 'Data Graph',
             data: data.ys,
             backgroundColor: 'rgba(191, 215, 255,1)',
             borderColor: 'rgba(66, 134, 244,1)',
@@ -101,10 +102,6 @@ async function chartIt() {
          }
       }
    })
-   document.getElementById("submit").onclick = () => {
-      myChart.destroy();
-      chartIt();
-   }
    document.getElementById("24hours").onclick = () => {
       timeLength = 12
       myChart.destroy();
@@ -135,14 +132,14 @@ async function chartIt() {
       myChart.destroy();
       chartIt();
    }
-
-   function removeData(chart) {
-      chart.data.labels.pop();
-      chart.data.datasets.forEach((dataset) => {
-         dataset.data.pop();
-      });
-      chart.update();
-   }
 };
-chartIt();
+document.getElementById("submit").onclick = () => {
+   if (!firstTime) {
+      myChart.destroy();
+      firstTime = false;
+   }
+   chartIt();
+}
+
+
 // end char.js
