@@ -114,7 +114,7 @@ async function calculateResult() {
          // the algorithm for finding profit from every city to city target
          let counter = result[j].count;
          let profit = data[selectedCityIndex].sell_price_min - data[j].sell_price_min;
-         console.log(profit);
+        
 
          result[j].bestProfit[counter] = 0;
          if (profit > result[j].bestProfit[counter]) {
