@@ -17,7 +17,7 @@
     "chart.js": "^2.8.0",
     "express": "^4.17.1",
     "node": "^12.4.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "nodemon": "^1.19.1"
   }
 }
